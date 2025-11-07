@@ -17,14 +17,27 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { 
-    origin: process.env.CLIENT_URL || 'https://chat-app-client-9xi8-932y2zsz2-kim254kes-projects.vercel.app', 
+    origin: [
+      process.env.CLIENT_URL,
+      'https://chat-app-client-9xi8.vercel.app', // Your production URL
+      'http://localhost:5173', // Local development
+      'http://localhost:3000'
+    ].filter(Boolean), // Remove undefined values
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
   },
+  transports: ['websocket', 'polling'],
+  pingTimeout: 60000,
+  pingInterval: 25000
 });
 
 app.use(cors({
-  origin: [process.env.CLIENT_URL || "https://chat-app-client-9xi8-932y2zsz2-kim254kes-projects.vercel.app"],
+  origin: [
+    process.env.CLIENT_URL,
+    'https://chat-app-client-9xi8.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:3000'
+  ].filter(Boolean),
   credentials: true,
 }));
 app.use(express.json());
