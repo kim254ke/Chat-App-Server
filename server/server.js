@@ -27,6 +27,7 @@ const io = new Server(server, {
     credentials: true
   },
   transports: ['websocket', 'polling'],
+  allowEIO3: true, // ← Add this for compatibility
   pingTimeout: 60000,
   pingInterval: 25000
 });
@@ -83,8 +84,25 @@ app.get('/api/messages/:room', async (req, res) => {
   }
 });
 
+// app.get('/api/health', (req, res) => {
+//   res.json({ status: 'ok', users: Object.keys(users).length });
+// });
+
+// Add this BEFORE your socket.io handlers
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'Chat Server Running ✅',
+    timestamp: new Date(),
+    socketIO: 'Active'
+  });
+});
+
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', users: Object.keys(users).length });
+  res.json({ 
+    status: 'ok', 
+    users: Object.keys(users).length,
+    timestamp: new Date()
+  });
 });
 
 // ---------------- SOCKET.IO HANDLERS ----------------
