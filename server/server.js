@@ -23,7 +23,7 @@ const io = new Server(server, {
   },
 });
 
-aapp.use(cors({
+app.use(cors({
   origin: [process.env.CLIENT_URL || "https://myapp-client.vercel.app"],
   credentials: true,
 }));
